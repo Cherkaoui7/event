@@ -13,6 +13,7 @@ const Navbar = () => {
       <div style={s.links}>
         {user ? (
           <>
+            <Link to="/simulator-3d" style={s.link}>Salle 3D</Link>
             <Link to="/dashboard"   style={s.link}>Mon tableau de bord</Link>
             <Link to="/suggestions" style={s.link}>Suggestions</Link>
             {user.role === 'admin' && <Link to="/admin" style={s.link}>Administration</Link>}
@@ -21,6 +22,7 @@ const Navbar = () => {
           </>
         ) : (
           <>
+            <Link to="/simulator-3d" style={s.link}>Salle 3D</Link>
             <Link to="/simulate" style={s.link}>Simulation</Link>
             <Link to="/login"    style={s.link}>Connexion</Link>
             <Link to="/register" style={s.registerBtn}>Créer un compte</Link>

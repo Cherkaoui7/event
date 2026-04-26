@@ -4,7 +4,9 @@ import apiClient from '../../api/axios';
 import { DECORATION_STYLES, LIGHTING_STYLES, TABLE_LAYOUTS } from '../../config/roomOptions';
 import CateringSection from '../../components/event/CateringSection';
 import PackSection from '../../components/event/PackSection';
-import RoomPreview from '../../components/event/RoomPreview';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, ContactShadows } from '@react-three/drei';
+import { RoomScene } from '../Simulator3D';
 
 const CustomizeRoom = () => {
   const { id }   = useParams();
@@ -117,7 +119,18 @@ const CustomizeRoom = () => {
             <h3>Éclairage</h3>
             {renderSelector(LIGHTING_STYLES, room.lighting_style, 'lighting_style')}
           </section>
-          <RoomPreview layout={room.table_layout} />
+          <div style={{ height: '550px', width: '100%', borderRadius: '12px', overflow: 'hidden', marginTop: '30px', border: '2px solid #efe3d3', background: '#1a1a1a' }}>
+            <Canvas shadows camera={{ position: [0, 8, 16], fov: 50 }}>
+              <color attach="background" args={['#1a1a1a']} />
+              <RoomScene 
+                 deco={room.decoration_style || 'moderne'} 
+                 light={room.lighting_style || 'spots'} 
+                 layout={room.table_layout || 'classique_rond'} 
+              />
+              <ContactShadows position={[0, 0, 0]} opacity={0.6} scale={50} blur={2.5} far={10} />
+              <OrbitControls makeDefault minPolarAngle={0} maxPolarAngle={Math.PI / 2.05} minDistance={5} maxDistance={35} />
+            </Canvas>
+          </div>
         </>
       )}
 

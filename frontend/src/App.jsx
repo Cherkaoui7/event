@@ -13,6 +13,7 @@ import CreateEvent from './pages/Event/CreateEvent';
 import CustomizeRoom from './pages/Event/CustomizeRoom';
 import EventSummary from './pages/Event/EventSummary';
 import Suggestions from './pages/Suggestions';
+import Simulator3D from './pages/Simulator3D';
 
 // Composant de protection des routes
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -30,6 +31,7 @@ const AppRoutes = () => (
       {/* Publiques */}
       <Route path="/"          element={<Home />} />
       <Route path="/simulate"  element={<Simulate />} />
+      <Route path="/simulator-3d" element={<Simulator3D />} />
       <Route path="/login"     element={<Login />} />
       <Route path="/register"  element={<Register />} />
 
