@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import apiClient from '../../api/axios';
+import PaymentModal from '../../components/payment/PaymentModal';
 
 const DECO_LABELS = { zellige:'Zellige traditionnel', traditionnel_marocain:'Marocain classique', moderne:'Moderne épuré' };
 const LIGHT_LABELS = { tamise:'Ambiance tamisée', spots:'Spots design', lustres_traditionnels:'Lustres traditionnels' };
@@ -13,6 +14,7 @@ const EventSummary = () => {
   const [room, setRoom]       = useState(null);
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -25,11 +27,15 @@ const EventSummary = () => {
   }, [id]);
 
   const handleConfirm = async () => {
-    if (!window.confirm('Confirmer la réservation ? Cette action est définitive.')) return;
+    setShowPayment(true);
+  };
+
+  const processReservation = async () => {
+    setShowPayment(false);
     setConfirming(true);
     try {
       await apiClient.put(`/events/${id}`, { status: 'confirmed' });
-      alert('✅ Réservation confirmée !');
+      alert('✅ Paiement reçu ! Réservation confirmée.');
       navigate('/dashboard');
     } catch { alert('Erreur'); }
     setConfirming(false);
@@ -100,7 +106,7 @@ const EventSummary = () => {
         </button>
         {event.status === 'draft' && (
           <button onClick={handleConfirm} disabled={confirming} style={s.confirmBtn}>
-            {confirming ? 'Confirmation...' : '✅ Confirmer la réservation'}
+            {confirming ? 'Confirmation...' : '💳 Payer l\'acompte (30%) & Confirmer'}
           </button>
         )}
         {event.status === 'confirmed' && (
@@ -109,6 +115,13 @@ const EventSummary = () => {
         <button onClick={() => navigate('/dashboard')} style={s.dashBtn}>Retour au tableau de bord</button>
       </div>
     </div>
+    {showPayment && (
+      <PaymentModal 
+        totalAmount={event.total_price} 
+        onClose={() => setShowPayment(false)} 
+        onSuccess={processReservation} 
+      />
+    )}
     </>
   );
 };
