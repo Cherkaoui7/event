@@ -40,13 +40,25 @@ const EventSummary = () => {
   const caterings = event.event_caterings || [];
 
   return (
-    <div style={s.container}>
+    <>
+      <style>{`
+        @media print {
+          .no-print { display: none !important; }
+          body { background: white !important; }
+          .print-container { padding: 0 !important; max-width: 100% !important; box-shadow: none !important; }
+          .print-card { border: 1px solid #ddd !important; box-shadow: none !important; break-inside: avoid; }
+        }
+      `}</style>
+      <div style={s.container} className="print-container">
       <div style={s.header}>
-        <h2 style={s.title}>📋 Récapitulatif</h2>
-        <button onClick={() => navigate(`/events/${id}/customize`)} style={s.backBtn}>← Modifier</button>
+        <div>
+          <h2 style={s.title}>DOMINATORES</h2>
+          <p style={{ color: '#7d8c7a', margin: '5px 0 0', fontSize: '0.9rem' }}>Devis Officiel - {new Date().toLocaleDateString('fr-FR')}</p>
+        </div>
+        <button onClick={() => navigate(`/events/${id}/customize`)} style={s.backBtn} className="no-print">← Modifier</button>
       </div>
 
-      <div style={s.card}>
+      <div style={s.card} className="print-card">
         <h3 style={s.sectionTitle}>Informations générales</h3>
         <Row label="Événement"    value={event.title} />
         <Row label="Type"         value={event.event_type} />
@@ -56,7 +68,7 @@ const EventSummary = () => {
       </div>
 
       {room && (room.decoration_style || room.lighting_style || room.table_layout) && (
-        <div style={s.card}>
+        <div style={s.card} className="print-card">
           <h3 style={s.sectionTitle}>Configuration de la salle</h3>
           {room.decoration_style && <Row label="Décoration" value={DECO_LABELS[room.decoration_style] || room.decoration_style} />}
           {room.lighting_style   && <Row label="Éclairage"  value={LIGHT_LABELS[room.lighting_style]   || room.lighting_style}   />}
@@ -65,7 +77,7 @@ const EventSummary = () => {
       )}
 
       {caterings.length > 0 && (
-        <div style={s.card}>
+        <div style={s.card} className="print-card">
           <h3 style={s.sectionTitle}>Traiteur</h3>
           {caterings.map(ec => (
             <div key={ec.id} style={s.cateringRow}>
@@ -77,12 +89,15 @@ const EventSummary = () => {
         </div>
       )}
 
-      <div style={s.totalCard}>
+      <div style={s.totalCard} className="print-card">
         <span style={s.totalLabel}>Total estimé</span>
         <strong style={s.totalValue}>{event.total_price?.toLocaleString()} MAD</strong>
       </div>
 
-      <div style={s.actions}>
+      <div style={s.actions} className="no-print">
+        <button onClick={() => window.print()} style={s.printBtn}>
+          📄 Télécharger le Devis (PDF)
+        </button>
         {event.status === 'draft' && (
           <button onClick={handleConfirm} disabled={confirming} style={s.confirmBtn}>
             {confirming ? 'Confirmation...' : '✅ Confirmer la réservation'}
@@ -94,6 +109,7 @@ const EventSummary = () => {
         <button onClick={() => navigate('/dashboard')} style={s.dashBtn}>Retour au tableau de bord</button>
       </div>
     </div>
+    </>
   );
 };
 
@@ -119,7 +135,8 @@ const s = {
     display:'flex', justifyContent:'space-between', alignItems:'center' },
   totalLabel:{ color:'rgba(255,255,255,0.85)', fontSize:'1rem' },
   totalValue:{ color:'#fff', fontSize:'1.6rem' },
-  actions:   { display:'flex', flexDirection:'column', gap:'12px' },
+  actions:   { display:'flex', flexDirection:'column', gap:'12px', marginTop:'20px' },
+  printBtn:  { padding:'14px', background:'#5a4a3f', color:'#fff', border:'none', borderRadius:'10px', cursor:'pointer', fontWeight:'600', fontSize:'1rem' },
   confirmBtn:{ padding:'14px', background:'#2e7d32', color:'#fff', border:'none', borderRadius:'10px',
     cursor:'pointer', fontWeight:'600', fontSize:'1rem' },
   confirmedBox:{ padding:'14px', background:'#e8f5e9', borderRadius:'10px', color:'#2e7d32',
