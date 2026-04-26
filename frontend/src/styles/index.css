@@ -1,0 +1,41 @@
+/* ── Reset & Base ──────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fdfbf7;
+  color: #333;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Motif zellige subtil en fond ──────────────────────── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b76e4b' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ── Typographie ───────────────────────────────────────── */
+h1, h2, h3, h4, h5 { margin: 0 0 0.5em; }
+p { margin: 0 0 0.5em; line-height: 1.6; }
+a { text-decoration: none; }
+
+/* ── Inputs focus ──────────────────────────────────────── */
+input:focus, select:focus, textarea:focus {
+  border-color: #b76e4b !important;
+  box-shadow: 0 0 0 3px rgba(183, 110, 75, 0.12);
+  outline: none;
+}
+
+/* ── Boutons hover ─────────────────────────────────────── */
+button:hover { opacity: 0.88; }
+
+/* ── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #fdfbf7; }
+::-webkit-scrollbar-thumb { background: #ddd2c2; border-radius: 3px; }
