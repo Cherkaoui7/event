@@ -194,14 +194,9 @@ const CustomizeRoom = () => {
 
       {/* Actions */}
       <div style={s.actions}>
-        <button onClick={() => navigate(`/events/${id}/summary`)} style={s.summaryBtn}>
-          Voir le récapitulatif
+        <button onClick={() => navigate(`/events/${id}/summary`)} style={s.confirmBtn}>
+          {event.status === 'draft' ? '💳 Voir le devis & Payer' : '📋 Voir le récapitulatif'}
         </button>
-        {event.status === 'draft' && (
-          <button onClick={handleConfirm} disabled={confirming} style={s.confirmBtn}>
-            {confirming ? 'Confirmation...' : '✅ Confirmer la réservation'}
-          </button>
-        )}
         {event.status === 'confirmed' && (
           <span style={s.confirmedBadge}>✅ Réservation confirmée</span>
         )}
