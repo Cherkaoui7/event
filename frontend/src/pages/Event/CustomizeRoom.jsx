@@ -48,6 +48,16 @@ const CustomizeRoom = () => {
     setSaving(false);
   };
 
+  const handleSnapshot = () => {
+    const canvas = document.querySelector('#simulator-wrapper canvas');
+    if (!canvas) return;
+    const image = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = image;
+    link.download = `Dominatores_Simulation_${event?.title || 'Salle'}.png`;
+    link.click();
+  };
+
   const handleConfirm = async () => {
     if (!window.confirm('Confirmer la réservation ?')) return;
     setConfirming(true);
@@ -119,8 +129,17 @@ const CustomizeRoom = () => {
             <h3>Éclairage</h3>
             {renderSelector(LIGHTING_STYLES, room.lighting_style, 'lighting_style')}
           </section>
-          <div style={{ height: '550px', width: '100%', borderRadius: '12px', overflow: 'hidden', marginTop: '30px', border: '2px solid #efe3d3', background: '#1a1a1a' }}>
-            <Canvas shadows camera={{ position: [0, 8, 16], fov: 50 }}>
+          <div id="simulator-wrapper" style={{ position: 'relative', height: '550px', width: '100%', borderRadius: '12px', overflow: 'hidden', marginTop: '30px', border: '2px solid #efe3d3', background: '#1a1a1a' }}>
+            <button 
+              onClick={handleSnapshot}
+              style={{ position: 'absolute', top: '15px', right: '15px', zIndex: 10, background: 'rgba(255,255,255,0.95)', border: 'none', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', color: '#b76e4b', boxShadow: '0 4px 12px rgba(0,0,0,0.3)', transition: 'all 0.2s', fontSize: '0.95rem' }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              title="Télécharger une photo de la salle"
+            >
+              📸 Prendre une photo
+            </button>
+            <Canvas shadows camera={{ position: [0, 8, 16], fov: 50 }} gl={{ preserveDrawingBuffer: true }}>
               <color attach="background" args={['#1a1a1a']} />
               <RoomScene 
                  deco={room.decoration_style || 'moderne'} 
