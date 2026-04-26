@@ -4,6 +4,7 @@ import apiClient from '../../api/axios';
 import { DECORATION_STYLES, LIGHTING_STYLES, TABLE_LAYOUTS } from '../../config/roomOptions';
 import CateringSection from '../../components/event/CateringSection';
 import PackSection from '../../components/event/PackSection';
+import SeatingChart from '../../components/event/SeatingChart';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, ContactShadows } from '@react-three/drei';
 import { RoomScene } from '../Simulator3D';
@@ -89,6 +90,7 @@ const CustomizeRoom = () => {
     { id:'room',     label:'🏛️ Salle'    },
     { id:'catering', label:'🍲 Traiteur'  },
     { id:'pack',     label:'📦 Packs'     },
+    { id:'seating',  label:'🪑 Plan de table' },
   ];
 
   if (!event) return <div style={{ padding:'2rem' }}>Chargement...</div>;
@@ -170,6 +172,14 @@ const CustomizeRoom = () => {
         <section style={s.section}>
           <h3>Choisissez un pack tout inclus</h3>
           <PackSection eventId={id} onApply={fetchAll} />
+        </section>
+      )}
+
+      {/* Onglet Plan de Table */}
+      {activeTab === 'seating' && (
+        <section style={s.section}>
+          <h3>Organisation de vos invités</h3>
+          <SeatingChart guestCount={event.guest_count} layout={room.table_layout || 'classique_rond'} />
         </section>
       )}
 
