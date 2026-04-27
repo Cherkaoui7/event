@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOMINATORES — Guide Complet v1.0</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+      --terra: #b76e4b;
+      --terra-dk: #8a4f32;
+      --terra-lt: #f9f2ec;
+      --brown: #5a4a3f;
+      --green: #6b7c6a;
+      --beige: #fdfbf7;
+      --border: #efe3d3;
+      --border2: #f5ede3;
+      --text: #2d2018;
+      --muted: #7d8c7a;
+      --white: #ffffff;
+      --admin-bg: #1e3a5f;
+      --success: #2d6a4f;
+      --warn: #92400e;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--beige);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 15px;
+    }
+
+    /* ── ZELLIGE PATTERN BACKGROUND ── */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b76e4b' fill-opacity='0.04'%3E%3Cpath d='M50 50v-6h-2v6h-6v2h6v6h2v-6h6v-2h-6zm0-40V4h-2v6h-6v2h6v6h2v-6h6v-2h-6zM10 50v-6H8v6H2v2h6v6h2v-6h6v-2h-6zM10 10V4H8v6H2v2h6v6h2v-6h6v-2h-6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ── PRINT BUTTON ── */
+    .print-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--terra);
+      color: #fff;
+      border: none;
+      padding: 13px 22px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      box-shadow: 0 6px 20px rgba(183, 110, 75, 0.35);
+      transition: all 0.2s;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .print-btn:hover {
+      background: var(--terra-dk);
+      transform: translateY(-2px);
+    }
+
+    @media print {
+
+      .print-btn,
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+    }
+
+    @media print {
+      .page {
+        padding: 0 25px 40px;
+      }
+    }
+
+    /* ── COVER ── */
+    .cover {
+      padding: 80px 0 60px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 50px;
+      position: relative;
+    }
+
+    .cover-badge {
+      display: inline-block;
+      background: var(--terra-lt);
+      color: var(--terra);
+      border: 1px solid var(--border);
+      padding: 5px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 22px;
+    }
+
+    .cover h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 5rem);
+      color: var(--terra);
+      letter-spacing: -2px;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .cover .tagline {
+      font-size: 1.1rem;
+      color: var(--brown);
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    .cover .meta {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 20px;
+    }
+
+    .cover-divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--terra), transparent);
+      margin: 20px auto 0;
+      border-radius: 2px;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 50px;
+      box-shadow: 0 2px 12px rgba(183, 110, 75, 0.06);
+    }
+
+    .toc-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--terra);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 30px;
+    }
+
+    .toc-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border2);
+      text-decoration: none;
+      color: var(--brown);
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .toc-item:hover {
+      color: var(--terra);
+    }
+
+    .toc-num {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--terra);
+      font-size: 0.75rem;
+      font-weight: 500;
+      min-width: 22px;
+    }
+
+    /* ── SECTION HEADINGS ── */
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.65rem;
+      color: var(--terra);
+      margin: 55px 0 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .h2-icon {
+      font-size: 1.2rem;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      color: var(--brown);
+      margin: 25px 0 10px;
+      font-weight: 600;
+    }
+
+    h4 {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin: 16px 0 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p {
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    ul,
+    ol {
+      padding-left: 20px;
+      margin-bottom: 14px;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+
+    strong {
+      color: var(--brown);
+      font-weight: 600;
+    }
+
+    a {
+      color: var(--terra);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* ── CODE ── */
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--terra-lt);
+      color: var(--terra);
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+
+    pre {
+      background: #1e1209;
+      color: #f0e6dc;
+      padding: 20px 22px;
+      border-radius: 12px;
+      overflow-x: auto;
+      margin: 14px 0 22px;
+      font-size: 0.84rem;
+      line-height: 1.65;
+      font-family: 'JetBrains Mono', monospace;
+      border: 1px solid #3a2415;
+      position: relative;
+    }
+
+    pre code {
+      background: none;
+      color: inherit;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    pre .comment {
+      color: #8d7060;
+    }
+
+    pre .kw {
+      color: #e8a87c;
+    }
+
+    pre .str {
+      color: #a8d8a8;
+    }
+
+    pre .val {
+      color: #87ceeb;
+    }
+
+    /* ── CALLOUT BOXES ── */
+    .box {
+      padding: 14px 18px;
+      border-radius: 10px;
+      margin: 14px 0 20px;
+      font-size: 0.9rem;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .box .box-icon {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .box-info {
+      background: var(--terra-lt);
+      border-left: 3px solid var(--terra);
+    }
+
+    .box-warn {
+      background: #fff8e1;
+      border-left: 3px solid #f59e0b;
+    }
+
+    .box-ok {
+      background: #e8f5e9;
+      border-left: 3px solid #4caf50;
+    }
+
+    .box-tip {
+      background: #e8f0fe;
+      border-left: 3px solid #3b82f6;
+    }
+
+    /* ── TABLES ── */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 12px 0 22px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    th {
+      background: var(--terra-lt);
+      color: var(--brown);
+      text-align: left;
+      padding: 11px 14px;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border2);
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #fdf6f0;
+    }
+
+    /* ── BADGES ── */
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #fff;
+      vertical-align: middle;
+    }
+
+    .badge-pub {
+      background: var(--muted);
+    }
+
+    .badge-auth {
+      background: var(--terra);
+    }
+
+    .badge-admin {
+      background: #264653;
+    }
+
+    .badge-new {
+      background: #2d6a4f;
+    }
+
+    /* ── TECH PILLS ── */
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 16px;
+    }
+
+    .pill {
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--brown);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    }
+
+    .pill-main {
+      background: var(--terra-lt);
+      border-color: var(--terra);
+      color: var(--terra);
+    }
+
+    /* ── FEATURE CARDS ── */
+    .feat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 16px 0;
+    }
+
+    .feat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .feat-card .feat-icon {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .feat-card h4 {
+      color: var(--brown);
+      margin: 0 0 6px;
+      font-size: 0.92rem;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .feat-card p {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* ── TAB VISUAL ── */
+    .tab-visual {
+      display: flex;
+      gap: 6px;
+      margin: 14px 0 20px;
+      background: #f5ede3;
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .tab-item {
+      flex: 1;
+      text-align: center;
+      padding: 10px 8px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--brown);
+    }
+
+    .tab-item.active {
+      background: var(--terra);
+      color: #fff;
+    }
+
+    /* ── FLOW STEPS ── */
+    .steps {
+      margin: 16px 0;
+    }
+
+    .step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border2);
+    }
+
+    .step:last-child {
+      border-bottom: none;
+    }
+
+    .step-num {
+      background: var(--terra);
+      color: #fff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 2px;
+    }
+
+    .step-body h4 {
+      margin: 0 0 4px;
+      color: var(--brown);
+      font-size: 0.9rem;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .step-body p {
+      margin: 0;
+      font-size: 0.87rem;
+      color: var(--muted);
+    }
+
+    /* ── TERMINAL HEADER ── */
+    .terminal {
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 14px 0 22px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    }
+
+    .terminal-bar {
+      background: #2d2018;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+
+    .dot-r {
+      background: #ff5f57;
+    }
+
+    .dot-y {
+      background: #febc2e;
+    }
+
+    .dot-g {
+      background: #28c840;
+    }
+
+    .terminal-label {
+      color: #7d6050;
+      font-size: 0.8rem;
+      font-family: 'JetBrains Mono', monospace;
+      margin-left: 8px;
+    }
+
+    .terminal pre {
+      border-radius: 0;
+      margin: 0;
+      border: none;
+      box-shadow: none;
+    }
+
+    /* ── ENDPOINT METHOD BADGE ── */
+    .method {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .method-get {
+      background: #e8f5e9;
+      color: #2d6a4f;
+    }
+
+    .method-post {
+      background: #fff3e0;
+      color: #e65100;
+    }
+
+    .method-put {
+      background: #e8eaf6;
+      color: #283593;
+    }
+
+    .method-del {
+      background: #fce4ec;
+      color: #b71c1c;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      margin-top: 70px;
+      padding-top: 30px;
+      border-top: 2px solid var(--border);
+      color: var(--muted);
+      font-size: 0.83rem;
+    }
+
+    .footer strong {
+      color: var(--terra);
+    }
+
+    /* ── SECTION CHIP ── */
+    .section-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--terra);
+      color: #fff;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    /* ── ARCH DIAGRAM ── */
+    .arch {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+
+    .arch-block {
+      flex: 1;
+      padding: 20px 16px;
+      text-align: center;
+    }
+
+    .arch-block:not(:last-child) {
+      border-right: 1px solid var(--border);
+    }
+
+    .arch-block .arch-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .arch-block .arch-name {
+      font-weight: 700;
+      color: var(--brown);
+      font-size: 0.95rem;
+    }
+
+    .arch-block .arch-detail {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .arch-arrow {
+      padding: 0 8px;
+      color: var(--terra);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    /* ── COLOR PALETTE ── */
+    .palette {
+      display: flex;
+      gap: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 12px 0;
+      border: 1px solid var(--border);
+    }
+
+    .swatch {
+      flex: 1;
+      height: 50px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 6px;
+    }
+
+    .swatch span {
+      font-size: 0.7rem;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.25);
+      color: #fff;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .page {
+        padding: 0 20px 60px;
+      }
+
+      .toc-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .arch {
+        flex-direction: column;
+      }
+
+      .arch-block:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <button class="print-btn no-print" onclick="window.print()">📄 Exporter en PDF</button>
+
+  <div class="page">
+
+    <!-- ════════════════ COVER ════════════════ -->
+    <div class="cover">
+      <div class="cover-badge">Projet PIE — Module Ingénierie</div>
+      <h1>DOMINATORES</h1>
+      <p class="tagline">Plateforme marocaine de planification d'événements sur mesure</p>
+      <p class="tagline" style="font-size:0.95rem; color:var(--muted);">Simulateur 3D · Traiteur · Budget intelligent ·
+        Administration</p>
+      <div class="cover-divider"></div>
+      <p class="meta">Guide d'Installation & Manuel d'Utilisation · Version 1.0 · Avril 2026</p>
+    </div>
+
+    <!-- ════════════════ TABLE DES MATIÈRES ════════════════ -->
+    <div class="toc">
+      <div class="toc-title">📑 Table des matières</div>
+      <div class="toc-grid">
+        <a class="toc-item" href="#intro"> <span class="toc-num">01</span> Présentation du projet</a>
+        <a class="toc-item" href="#archi"> <span class="toc-num">02</span> Architecture technique</a>
+        <a class="toc-item" href="#prereq"> <span class="toc-num">03</span> Prérequis</a>
+        <a class="toc-item" href="#install"> <span class="toc-num">04</span> Installation pas à pas</a>
+        <a class="toc-item" href="#lancer"> <span class="toc-num">05</span> Lancer l'application</a>
+        <a class="toc-item" href="#fonc"> <span class="toc-num">06</span> Fonctionnalités</a>
+        <a class="toc-item" href="#api"> <span class="toc-num">07</span> API REST — Endpoints</a>
+        <a class="toc-item" href="#bdd"> <span class="toc-num">08</span> Base de données</a>
+        <a class="toc-item" href="#comptes"> <span class="toc-num">09</span> Comptes par défaut</a>
+        <a class="toc-item" href="#faq"> <span class="toc-num">10</span> FAQ & Dépannage</a>
+      </div>
+    </div>
+
+    <!-- ════════════════ 1. PRÉSENTATION ════════════════ -->
+    <h2 id="intro"><span class="h2-icon">🎯</span> 1. Présentation du projet</h2>
+
+    <p><strong>DOMINATORES</strong> est la première plateforme digitale marocaine dédiée à l'organisation d'événements
+      sur mesure. Développée dans le cadre du module PIE, elle couvre l'intégralité du parcours de planification — de la
+      simulation à la confirmation de réservation.</p>
+
+    <div class="feat-grid">
+      <div class="feat-card">
+        <span class="feat-icon">🏛️</span>
+        <h4>Personnalisation de salle</h4>
+        <p>Décoration (zellige, traditionnel, moderne), éclairage, disposition des tables — tout configurable en temps
+          réel.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🎮</span>
+        <h4>Simulateur 3D interactif</h4>
+        <p>Visualisation Three.js avec React Three Fiber. Caméra orbite, changement de décoration en direct, export
+          photo.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🍲</span>
+        <h4>Traiteur marocain</h4>
+        <p>Catalogue complet : couscous, tajines, pastilla, méchoui, pâtisseries. Prix calculé automatiquement par
+          invité.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">💡</span>
+        <h4>Suggestions intelligentes</h4>
+        <p>L'IA recommande la meilleure configuration selon le budget, le type d'événement et le nombre d'invités.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">📦</span>
+        <h4>Packs tout inclus</h4>
+        <p>Packs préconfigurés (Économique, Classique, Luxe) — appliquent salle + traiteur en un seul clic.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🪑</span>
+        <h4>Plan de table interactif</h4>
+        <p>Disposition visuelle des tables selon le nombre d'invités et la configuration choisie.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">📄</span>
+        <h4>Devis PDF</h4>
+        <p>Génération d'un récapitulatif complet imprimable / exportable en PDF directement depuis le navigateur.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">💳</span>
+        <h4>Paiement simulé</h4>
+        <p>Modale de paiement d'acompte (30%) qui confirme la réservation et change le statut de l'événement.</p>
+      </div>
+    </div>
+
+    <div class="box box-info">
+      <span class="box-icon">🇲🇦</span>
+      <div>Projet conçu pour le marché marocain avec des contenus, tarifs et styles adaptés à la culture locale
+        (zellige, motifs marocains, plats traditionnels, monnaie MAD).</div>
+    </div>
+
+    <!-- ════════════════ 2. ARCHITECTURE ════════════════ -->
+    <h2 id="archi"><span class="h2-icon">⚙️</span> 2. Architecture technique</h2>
+
+    <p>Le projet adopte une architecture <strong>découplée</strong> : le backend Laravel expose une API REST, et le
+      frontend React consomme cette API de manière indépendante.</p>
+
+    <div class="arch">
+      <div class="arch-block">
+        <div class="arch-label">Navigateur</div>
+        <div class="arch-name">React 19 + Vite</div>
+        <div class="arch-detail">localhost:5173</div>
+      </div>
+      <div class="arch-arrow">⟷</div>
+      <div class="arch-block">
+        <div class="arch-label">API REST JSON</div>
+        <div class="arch-name">Laravel 10</div>
+        <div class="arch-detail">localhost:8000</div>
+      </div>
+      <div class="arch-arrow">⟷</div>
+      <div class="arch-block">
+        <div class="arch-label">Stockage</div>
+        <div class="arch-name">SQLite</div>
+        <div class="arch-detail">database.sqlite</div>
+      </div>
+    </div>
+
+    <h3>Stack Backend</h3>
+    <div class="pills">
+      <span class="pill pill-main">Laravel 10</span>
+      <span class="pill pill-main">PHP 8.1+</span>
+      <span class="pill">SQLite</span>
+      <span class="pill">Laravel Sanctum (Auth Bearer)</span>
+      <span class="pill">Eloquent ORM</span>
+      <span class="pill">API Resources</span>
+    </div>
+
+    <h3>Stack Frontend</h3>
+    <div class="pills">
+      <span class="pill pill-main">React 19</span>
+      <span class="pill pill-main">Vite 8</span>
+      <span class="pill">React Router 7</span>
+      <span class="pill">Three.js + React Three Fiber</span>
+      <span class="pill">@react-three/drei</span>
+      <span class="pill">Recharts</span>
+      <span class="pill">Axios</span>
+      <span class="pill">CSS-in-JS (inline styles)</span>
+    </div>
+
+    <h3>Communication & Sécurité</h3>
+    <ul>
+      <li><strong>Authentification :</strong> Token Bearer via Laravel Sanctum (stocké dans <code>localStorage</code>)
+      </li>
+      <li><strong>Proxy Vite :</strong> les appels <code>/api/*</code> du frontend sont redirigés vers
+        <code>http://localhost:8000</code></li>
+      <li><strong>Rôles :</strong> <code>client</code> (accès à ses événements) et <code>admin</code> (accès au panneau
+        d'administration)</li>
+      <li><strong>Validation :</strong> toutes les entrées sont validées côté serveur (Laravel Form Validation)</li>
+    </ul>
+
+    <!-- ════════════════ 3. PRÉREQUIS ════════════════ -->
+    <h2 id="prereq"><span class="h2-icon">📋</span> 3. Prérequis d'installation</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Logiciel</th>
+            <th>Version requise</th>
+            <th>Vérification</th>
+            <th>Téléchargement</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>PHP</strong></td>
+            <td>≥ 8.1</td>
+            <td><code>php -v</code></td>
+            <td><a href="https://www.php.net/downloads">php.net</a></td>
+          </tr>
+          <tr>
+            <td><strong>Composer</strong></td>
+            <td>≥ 2.x</td>
+            <td><code>composer -V</code></td>
+            <td><a href="https://getcomposer.org">getcomposer.org</a></td>
+          </tr>
+          <tr>
+            <td><strong>Node.js</strong></td>
+            <td>≥ 18 LTS</td>
+            <td><code>node -v</code></td>
+            <td><a href="https://nodejs.org">nodejs.org</a></td>
+          </tr>
+          <tr>
+            <td><strong>npm</strong></td>
+            <td>≥ 9 (inclus)</td>
+            <td><code>npm -v</code></td>
+            <td>Inclus avec Node.js</td>
+          </tr>
+          <tr>
+            <td><strong>Git</strong></td>
+            <td>≥ 2.x</td>
+            <td><code>git --version</code></td>
+            <td><a href="https://git-scm.com">git-scm.com</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Extensions PHP requises</h3>
+    <p>Vérifiez que ces extensions sont activées dans <code>php.ini</code> :</p>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">php.ini</span>
+      </div>
+      <pre><code>extension=pdo_sqlite
+extension=mbstring
+extension=openssl
+extension=tokenizer
+extension=xml
+extension=ctype
+extension=fileinfo</code></pre>
+    </div>
+
+    <div class="box box-info">
+      <span class="box-icon">💡</span>
+      <div><strong>Windows :</strong> utilisez <a href="https://laragon.org/">Laragon</a> — il inclut PHP, Composer et
+        toutes les extensions préconfigurées. Recommandé pour les étudiants.</div>
+    </div>
+
+    <!-- ════════════════ 4. INSTALLATION ════════════════ -->
+    <h2 id="install"><span class="h2-icon">🔧</span> 4. Installation pas à pas</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Cloner le dépôt</h4>
+          <p>Récupérez le code source depuis GitHub</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Installer le backend Laravel</h4>
+          <p>Dépendances PHP + configuration base de données</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Lancer les migrations & seeders</h4>
+          <p>Création des tables et données de base</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Installer le frontend React</h4>
+          <p>Dépendances npm + Three.js + Recharts</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Démarrer les deux serveurs</h4>
+          <p>Laravel (port 8000) + Vite (port 5173)</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Étape 1 — Cloner le projet</h3>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">bash</span>
+      </div>
+      <pre><code>git clone https://github.com/votre-repo/dominatores.git
+cd dominatores</code></pre>
+    </div>
+
+    <h3>Étape 2 — Backend Laravel</h3>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">bash — dossier /backend</span>
+      </div>
+      <pre><code>cd backend
+
+<span class="comment"># Installer les dépendances PHP</span>
+composer install
+
+<span class="comment"># Copier le fichier d'environnement</span>
+cp .env.example .env          <span class="comment"># Linux / Mac</span>
+copy .env.example .env        <span class="comment"># Windows</span>
+
+<span class="comment"># Générer la clé d'application</span>
+php artisan key:generate</code></pre>
+    </div>
+
+    <h3>Étape 3 — Configurer SQLite</h3>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">bash — créer le fichier SQLite</span>
+      </div>
+      <pre><code><span class="comment"># Linux / Mac</span>
+touch database/database.sqlite
+
+<span class="comment"># Windows PowerShell</span>
+New-Item -Path database\database.sqlite -ItemType File</code></pre>
+    </div>
+
+    <p>Ouvrez <code>.env</code> et configurez :</p>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">.env</span>
+      </div>
+      <pre><code>DB_CONNECTION=sqlite
+DB_DATABASE=<span class="str">/chemin/absolu/vers/backend/database/database.sqlite</span>
+
+<span class="comment"># Windows exemple :</span>
+<span class="comment"># DB_DATABASE=C:\\Users\\Vous\\dominatores\\backend\\database\\database.sqlite</span>
+
+SANCTUM_STATEFUL_DOMAINS=<span class="str">localhost:5173</span>
+SESSION_DOMAIN=<span class="str">localhost</span></code></pre>
+    </div>
+
+    <div class="box box-warn">
+      <span class="box-icon">⚠️</span>
+      <div><strong>Important :</strong> Le chemin <code>DB_DATABASE</code> doit être un chemin <strong>absolu</strong>.
+        Sur Windows, utilisez des double-backslashes <code>\\</code> ou des slashs normaux <code>/</code>.</div>
+    </div>
+
+    <h3>Étape 4 — Migrations & Données initiales</h3>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">bash</span>
+      </div>
+      <pre><code><span class="comment"># Créer toutes les tables</span>
+php artisan migrate
+
+<span class="comment"># Insérer les données : plats marocains + packs événementiels</span>
+php artisan db:seed</code></pre>
+    </div>
+
+    <h3>Étape 5 — Créer le compte Administrateur</h3>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">bash — Laravel Tinker</span>
+      </div>
+      <pre><code>php artisan tinker
+
+<span class="comment">// Coller cette commande dans Tinker :</span>
+App\Models\User::create([
+    <span class="str">'name'</span>     => <span class="str">'Admin'</span>,
+    <span class="str">'email'</span>    => <span class="str">'admin@dominatores.ma'</span>,
+    <span class="str">'password'</span> => bcrypt(<span class="str">'password123'</span>),
+    <span class="str">'role'</span>     => <span class="str">'admin'</span>,
+]);
+
+exit</code></pre>
+    </div>
+
+    <h3>Étape 6 — Frontend React</h3>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">bash — dossier /frontend</span>
+      </div>
+      <pre><code>cd ../frontend
+
+<span class="comment"># Installer toutes les dépendances</span>
+npm install
+
+<span class="comment"># Vérifier que les packages 3D sont présents :</span>
+npm install three @react-three/fiber @react-three/drei recharts</code></pre>
+    </div>
+
+    <div class="box box-tip">
+      <span class="box-icon">📦</span>
+      <div><strong>Packages clés :</strong> <code>three</code> + <code>@react-three/fiber</code> +
+        <code>@react-three/drei</code> pour la 3D, et <code>recharts</code> pour les graphiques du dashboard admin.
+      </div>
+    </div>
+
+    <!-- ════════════════ 5. LANCER ════════════════ -->
+    <h2 id="lancer"><span class="h2-icon">🚀</span> 5. Lancer l'application</h2>
+
+    <p>Deux terminaux doivent rester ouverts en parallèle :</p>
+
+    <h3>Terminal 1 — Serveur API (Laravel)</h3>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">bash — /backend</span>
+      </div>
+      <pre><code>cd backend
+php artisan serve</code></pre>
+    </div>
+    <div class="box box-ok">
+      <span class="box-icon">✅</span>
+      <div>L'API démarre sur <strong>http://localhost:8000</strong> — toutes les routes <code>/api/*</code> sont
+        accessibles.</div>
+    </div>
+
+    <h3>Terminal 2 — Application React (Vite)</h3>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">bash — /frontend</span>
+      </div>
+      <pre><code>cd frontend
+npm run dev</code></pre>
+    </div>
+    <div class="box box-ok">
+      <span class="box-icon">✅</span>
+      <div>L'application React démarre sur <strong><a href="http://localhost:5173">http://localhost:5173</a></strong> —
+        ouvrez cette adresse dans votre navigateur.</div>
+    </div>
+
+    <div class="box box-tip">
+      <span class="box-icon">🌐</span>
+      <div>Pour la <strong>3D interactive</strong>, utilisez un navigateur moderne avec WebGL activé :
+        <strong>Chrome</strong>, Firefox ou Edge. Safari peut présenter des limitations.</div>
+    </div>
+
+    <!-- ════════════════ 6. FONCTIONNALITÉS ════════════════ -->
+    <h2 id="fonc"><span class="h2-icon">✨</span> 6. Fonctionnalités du site</h2>
+
+    <h3>6.1 — Page d'accueil</h3>
+    <p>Présentation de la plateforme avec une mise en page immersive (motif zellige en fond). Les visiteurs non
+      connectés voient les boutons <strong>Simulation gratuite</strong> et <strong>Créer un compte</strong>. Les clients
+      connectés accèdent directement à leur tableau de bord.</p>
+
+    <h3>6.2 — Inscription & Connexion</h3>
+    <p>Système d'authentification sécurisé par token. Le rôle <code>client</code> est attribué automatiquement à
+      l'inscription. Le rôle <code>admin</code> est assigné manuellement via Tinker.</p>
+
+    <h3>6.3 — Tableau de bord client</h3>
+    <p>Vue centralisée de tous les événements du client avec statuts (Brouillon / Confirmé / Annulé), prix total, et
+      accès rapide aux actions :</p>
+    <ul>
+      <li>Créer un nouvel événement</li>
+      <li>Accéder à la personnalisation (4 onglets)</li>
+      <li>Consulter le récapitulatif / devis PDF</li>
+    </ul>
+
+    <h3>6.4 — Création d'événement</h3>
+    <p>Formulaire simple et guidé : titre de l'événement, type (mariage, anniversaire, fête, professionnel), nombre
+      d'invités, budget maximum. À la validation, l'utilisateur est redirigé vers la personnalisation.</p>
+
+    <h3>6.5 — Personnalisation de la salle (4 onglets)</h3>
+
+    <div class="tab-visual">
+      <div class="tab-item active">🏛️ Salle</div>
+      <div class="tab-item">🍲 Traiteur</div>
+      <div class="tab-item">📦 Packs</div>
+      <div class="tab-item">🪑 Plan de table</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Onglet</th>
+            <th>Contenu</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>🏛️ Salle</strong></td>
+            <td>Sélection du style de décoration (Zellige, Marocain classique, Moderne épuré), de l'éclairage (tamisé,
+              spots, lustres traditionnels) et de la disposition des tables. Un <strong>aperçu 3D interactif</strong> se
+              met à jour en temps réel en bas de page, avec option d'export photo.</td>
+          </tr>
+          <tr>
+            <td><strong>🍲 Traiteur</strong></td>
+            <td>Catalogue organisé par catégories (entrées, plats, desserts). Ajout de plats avec sélection de la
+              quantité (défaut = nombre d'invités). Le prix total se recalcule automatiquement après chaque
+              modification.</td>
+          </tr>
+          <tr>
+            <td><strong>📦 Packs</strong></td>
+            <td>Packs préconfigurés (Mariage Économique, Mariage Luxe, Anniversaire Festif). Cliquer sur « Appliquer »
+              configure automatiquement la salle ET le traiteur, remplace les choix précédents et recalcule le prix.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>🪑 Plan de table</strong></td>
+            <td>Visualisation interactive du placement des tables selon le nombre d'invités et la disposition choisie.
+              Permet de simuler l'organisation spatiale de l'événement.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>La <strong>barre de prix</strong> en bas de page se met à jour en temps réel après chaque modification.
+      L'enregistrement est automatique.</p>
+
+    <h3>6.6 — Simulateur 3D</h3>
+    <p>Accessible via l'onglet Salle ou la navigation principale. Construit avec <strong>Three.js / React Three
+        Fiber</strong> :</p>
+    <ul>
+      <li>Vue orbite : cliquez et faites glisser pour tourner autour de la salle</li>
+      <li>Zoom avec la molette de la souris</li>
+      <li>Changement de décoration, éclairage et disposition en temps réel</li>
+      <li>Bouton <strong>"Prendre une photo"</strong> pour capturer la vue 3D</li>
+    </ul>
+
+    <div class="box box-warn">
+      <span class="box-icon">⚠️</span>
+      <div>La 3D nécessite un navigateur avec <strong>WebGL activé</strong>. Sur Chrome, accédez à
+        <code>chrome://settings/system</code> et vérifiez que "Utiliser l'accélération matérielle" est activé.</div>
+    </div>
+
+    <h3>6.7 — Suggestions intelligentes</h3>
+    <p>Formulaire de simulation accessible sans créer d'événement. L'utilisateur entre :</p>
+    <ul>
+      <li>Type d'événement</li>
+      <li>Budget maximum disponible</li>
+      <li>Nombre d'invités prévu</li>
+    </ul>
+    <p>Le système analyse ces paramètres et recommande automatiquement une configuration optimale. Un bouton
+      <strong>"Créer cet événement"</strong> pré-remplit l'événement avec la configuration suggérée.</p>
+
+    <h3>6.8 — Récapitulatif & Devis PDF</h3>
+    <p>Page de synthèse complète reprenant toutes les options sélectionnées avec les prix unitaires et le total. Deux
+      actions sont disponibles :</p>
+    <ul>
+      <li><strong>📄 Exporter en PDF</strong> : utilise la fonction d'impression du navigateur pour générer un PDF
+        professionnel</li>
+      <li><strong>💳 Payer l'acompte (30%)</strong> : modale de paiement simulé qui confirme la réservation et passe le
+        statut à « Confirmé »</li>
+    </ul>
+
+    <h3>6.9 — Dashboard Administration</h3>
+    <p>Accessible uniquement aux comptes <code>admin</code> via <code>/admin</code>. Contient trois onglets :</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Onglet</th>
+            <th>Contenu</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>📊 Tableau de bord</strong></td>
+            <td>KPIs (total utilisateurs, total événements, revenu total, revenu moyen). Graphiques : donut (répartition
+              types d'événements, statuts), courbe du revenu mensuel, histogramme des inscriptions, top 5 clients par
+              revenus.</td>
+          </tr>
+          <tr>
+            <td><strong>👥 Utilisateurs</strong></td>
+            <td>Liste paginée de tous les utilisateurs avec nom, email, rôle et date d'inscription.</td>
+          </tr>
+          <tr>
+            <td><strong>📅 Événements</strong></td>
+            <td>Liste de tous les événements avec client associé, type, statut et prix total.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ════════════════ 7. API ════════════════ -->
+    <h2 id="api"><span class="h2-icon">🔌</span> 7. API REST — Endpoints</h2>
+
+    <h3>Routes publiques <span class="badge badge-pub">Pas d'auth</span></h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Méthode</th>
+            <th>URL</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="method method-post">POST</span></td>
+            <td><code>/api/register</code></td>
+            <td>Inscription (retourne un token)</td>
+          </tr>
+          <tr>
+            <td><span class="method method-post">POST</span></td>
+            <td><code>/api/login</code></td>
+            <td>Connexion (retourne un token)</td>
+          </tr>
+          <tr>
+            <td><span class="method method-post">POST</span></td>
+            <td><code>/api/suggestions</code></td>
+            <td>Obtenir une suggestion selon budget</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Routes authentifiées <span class="badge badge-auth">Bearer Token</span></h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Méthode</th>
+            <th>URL</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="method method-post">POST</span></td>
+            <td><code>/api/logout</code></td>
+            <td>Déconnexion (révoque le token)</td>
+          </tr>
+          <tr>
+            <td><span class="method method-get">GET</span></td>
+            <td><code>/api/user</code></td>
+            <td>Profil de l'utilisateur connecté</td>
+          </tr>
+          <tr>
+            <td><span class="method method-get">GET</span></td>
+            <td><code>/api/events</code></td>
+            <td>Liste des événements du client</td>
+          </tr>
+          <tr>
+            <td><span class="method method-post">POST</span></td>
+            <td><code>/api/events</code></td>
+            <td>Créer un événement (statut: draft)</td>
+          </tr>
+          <tr>
+            <td><span class="method method-get">GET</span></td>
+            <td><code>/api/events/{id}</code></td>
+            <td>Détails + salle + traiteur</td>
+          </tr>
+          <tr>
+            <td><span class="method method-put">PUT</span></td>
+            <td><code>/api/events/{id}</code></td>
+            <td>Modifier / confirmer un événement</td>
+          </tr>
+          <tr>
+            <td><span class="method method-get">GET</span></td>
+            <td><code>/api/events/{id}/room</code></td>
+            <td>Configuration actuelle de la salle</td>
+          </tr>
+          <tr>
+            <td><span class="method method-post">POST</span></td>
+            <td><code>/api/events/{id}/room</code></td>
+            <td>Sauvegarder la configuration salle</td>
+          </tr>
+          <tr>
+            <td><span class="method method-get">GET</span></td>
+            <td><code>/api/catering</code></td>
+            <td>Catalogue des plats marocains</td>
+          </tr>
+          <tr>
+            <td><span class="method method-post">POST</span></td>
+            <td><code>/api/events/{id}/catering</code></td>
+            <td>Ajouter un plat à l'événement</td>
+          </tr>
+          <tr>
+            <td><span class="method method-put">PUT</span></td>
+            <td><code>/api/events/{id}/catering/{itemId}</code></td>
+            <td>Modifier la quantité d'un plat</td>
+          </tr>
+          <tr>
+            <td><span class="method method-del">DEL</span></td>
+            <td><code>/api/events/{id}/catering/{itemId}</code></td>
+            <td>Retirer un plat</td>
+          </tr>
+          <tr>
+            <td><span class="method method-get">GET</span></td>
+            <td><code>/api/packs</code></td>
+            <td>Liste des packs disponibles</td>
+          </tr>
+          <tr>
+            <td><span class="method method-post">POST</span></td>
+            <td><code>/api/events/{id}/apply-pack</code></td>
+            <td>Appliquer un pack à l'événement</td>
+          </tr>
+          <tr>
+            <td><span class="method method-get">GET</span></td>
+            <td><code>/api/decorations</code></td>
+            <td>Catalogue des décorations</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Routes Admin <span class="badge badge-admin">Admin uniquement</span></h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Méthode</th>
+            <th>URL</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="method method-get">GET</span></td>
+            <td><code>/api/admin/users</code></td>
+            <td>Liste complète des utilisateurs</td>
+          </tr>
+          <tr>
+            <td><span class="method method-get">GET</span></td>
+            <td><code>/api/admin/events</code></td>
+            <td>Liste complète des événements</td>
+          </tr>
+          <tr>
+            <td><span class="method method-get">GET</span></td>
+            <td><code>/api/admin/stats</code></td>
+            <td>Statistiques pour le dashboard (KPIs, graphiques)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ════════════════ 8. BASE DE DONNÉES ════════════════ -->
+    <h2 id="bdd"><span class="h2-icon">🗄️</span> 8. Structure de la base de données</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Table</th>
+            <th>Colonnes principales</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>users</code></td>
+            <td>id, name, email, password, role</td>
+            <td>Utilisateurs — rôle <code>client</code> ou <code>admin</code></td>
+          </tr>
+          <tr>
+            <td><code>events</code></td>
+            <td>id, user_id, title, event_type, status, guest_count, budget, total_price</td>
+            <td>Événements — statuts : <code>draft</code> / <code>confirmed</code> / <code>cancelled</code></td>
+          </tr>
+          <tr>
+            <td><code>rooms</code></td>
+            <td>id, event_id, table_layout, decoration_style, lighting_style, custom_options</td>
+            <td>Configuration de la salle (1 salle par événement)</td>
+          </tr>
+          <tr>
+            <td><code>catering_items</code></td>
+            <td>id, name, description, category, price_per_person, active</td>
+            <td>Catalogue des plats marocains</td>
+          </tr>
+          <tr>
+            <td><code>event_catering</code></td>
+            <td>id, event_id, catering_item_id, quantity, line_total</td>
+            <td>Plats sélectionnés par événement (table pivot)</td>
+          </tr>
+          <tr>
+            <td><code>packs</code></td>
+            <td>id, name, event_type, base_price, decoration_style, lighting_style, table_layout</td>
+            <td>Packs préconfigurés</td>
+          </tr>
+          <tr>
+            <td><code>pack_catering</code></td>
+            <td>id, pack_id, catering_item_id, quantity_per_guest</td>
+            <td>Plats inclus dans chaque pack</td>
+          </tr>
+          <tr>
+            <td><code>decorations</code></td>
+            <td>id, name, type, price, active</td>
+            <td>Catalogue des éléments de décoration</td>
+          </tr>
+          <tr>
+            <td><code>room_decorations</code></td>
+            <td>id, room_id, decoration_id, quantity, line_total</td>
+            <td>Décorations choisies par salle</td>
+          </tr>
+          <tr>
+            <td><code>personal_access_tokens</code></td>
+            <td>tokenable_id, token, abilities, expires_at</td>
+            <td>Tokens Sanctum (générés automatiquement)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Relations clés</h3>
+    <ul>
+      <li>Un <strong>utilisateur</strong> possède plusieurs <strong>événements</strong></li>
+      <li>Un <strong>événement</strong> a exactement une <strong>salle</strong> (relation 1:1)</li>
+      <li>Un <strong>événement</strong> peut avoir plusieurs <strong>plats</strong> via <code>event_catering</code></li>
+      <li>Un <strong>pack</strong> regroupe plusieurs <strong>plats</strong> via <code>pack_catering</code></li>
+      <li>Une <strong>salle</strong> peut avoir des <strong>décorations supplémentaires</strong> via
+        <code>room_decorations</code></li>
+    </ul>
+
+    <!-- ════════════════ 9. COMPTES ════════════════ -->
+    <h2 id="comptes"><span class="h2-icon">👤</span> 9. Comptes par défaut</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Rôle</th>
+            <th>Email</th>
+            <th>Mot de passe</th>
+            <th>Accès</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-admin">Admin</span></td>
+            <td><code>admin@dominatores.ma</code></td>
+            <td><code>password123</code></td>
+            <td>Panneau admin complet + toutes les fonctionnalités</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box box-info">
+      <span class="box-icon">ℹ️</span>
+      <div>Tout compte créé via le formulaire d'inscription reçoit automatiquement le rôle <strong>client</strong>. Il
+        n'est pas possible de créer un admin depuis l'interface — uniquement via <code>php artisan tinker</code>.</div>
+    </div>
+
+    <h3>Palette de couleurs DOMINATORES</h3>
+    <div class="palette">
+      <div class="swatch" style="background:#b76e4b;"><span>#b76e4b</span></div>
+      <div class="swatch" style="background:#5a4a3f;"><span>#5a4a3f</span></div>
+      <div class="swatch" style="background:#7d8c7a;"><span>#7d8c7a</span></div>
+      <div class="swatch" style="background:#fdfbf7; border:1px solid #efe3d3;"><span
+          style="color:#5a4a3f;">#fdfbf7</span></div>
+      <div class="swatch" style="background:#efe3d3;"><span style="color:#5a4a3f;">#efe3d3</span></div>
+      <div class="swatch" style="background:#2e7d32;"><span>#2e7d32</span></div>
+    </div>
+
+    <!-- ════════════════ 10. FAQ ════════════════ -->
+    <h2 id="faq"><span class="h2-icon">❓</span> 10. FAQ & Dépannage</h2>
+
+    <h3>Le frontend ne charge pas les données de l'API</h3>
+    <p>Vérifiez :</p>
+    <ul>
+      <li>Que le serveur Laravel tourne : <code>php artisan serve</code> doit afficher <em>"Application running on
+          http://localhost:8000"</em></li>
+      <li>Que <code>vite.config.js</code> contient bien le proxy <code>/api → http://localhost:8000</code></li>
+      <li>Que vous ouvrez <code>http://localhost:5173</code> et non un autre port</li>
+    </ul>
+
+    <h3>Erreur "no such table: events" (ou autre table)</h3>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">bash — réinitialiser complètement</span>
+      </div>
+      <pre><code><span class="comment"># Recrée toutes les tables ET recharge les données :</span>
+php artisan migrate:fresh --seed
+
+<span class="comment"># Puis recréer l'admin :</span>
+php artisan tinker
+App\Models\User::create(['name'=>'Admin','email'=>'admin@dominatores.ma','password'=>bcrypt('password123'),'role'=>'admin']);
+exit</code></pre>
+    </div>
+
+    <h3>Erreur 401 Unauthorized sur tous les appels API</h3>
+    <p>Le token a expiré ou est invalide. Solutions :</p>
+    <ul>
+      <li>Déconnectez-vous et reconnectez-vous depuis l'interface</li>
+      <li>Ou videz le <code>localStorage</code> dans les outils développeur (F12 → Application → Local Storage)</li>
+      <li>Vérifiez que <code>SANCTUM_STATEFUL_DOMAINS=localhost:5173</code> est dans le <code>.env</code></li>
+    </ul>
+
+    <h3>La page /admin affiche "Accès non autorisé"</h3>
+    <p>Vérifiez que le middleware est enregistré dans <code>app/Http/Kernel.php</code> :</p>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">app/Http/Kernel.php</span>
+      </div>
+      <pre><code>protected $routeMiddleware = [
+    <span class="comment">// ...</span>
+    <span class="str">'admin'</span> => \App\Http\Middleware\AdminMiddleware::class,
+];</code></pre>
+    </div>
+
+    <h3>Le simulateur 3D ne s'affiche pas</h3>
+    <ul>
+      <li>Vérifiez l'installation : <code>npm install three @react-three/fiber @react-three/drei</code></li>
+      <li>Utilisez Chrome ou Firefox (Safari a des problèmes WebGL)</li>
+      <li>Dans Chrome, activez l'accélération matérielle : <code>chrome://settings/system</code></li>
+      <li>Vérifiez la console navigateur (F12) pour les erreurs Three.js</li>
+    </ul>
+
+    <h3>Les graphiques du dashboard admin ne s'affichent pas</h3>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">bash</span>
+      </div>
+      <pre><code>npm install recharts</code></pre>
+    </div>
+    <p>Puis vérifiez que la route <code>GET /api/admin/stats</code> retourne des données depuis le backend.</p>
+
+    <h3>Erreur CORS au démarrage</h3>
+    <p>Ouvrez <code>config/cors.php</code> et vérifiez :</p>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">config/cors.php</span>
+      </div>
+      <pre><code>'paths'            => ['api/*', 'sanctum/csrf-cookie'],
+'allowed_methods'  => ['*'],
+'allowed_origins'  => ['http://localhost:5173'],
+'allowed_headers'  => ['*'],
+'supports_credentials' => false,</code></pre>
+    </div>
+
+    <h3>Réinitialisation complète rapide</h3>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div><span class="terminal-label">bash</span>
+      </div>
+      <pre><code><span class="comment"># === Backend ===</span>
+cd backend
+php artisan migrate:fresh --seed
+php artisan tinker
+App\Models\User::create(['name'=>'Admin','email'=>'admin@dominatores.ma','password'=>bcrypt('password123'),'role'=>'admin']);
+exit
+php artisan serve
+
+<span class="comment"># === Frontend (autre terminal) ===</span>
+cd frontend
+npm run dev</code></pre>
+    </div>
+
+    <div class="box box-ok">
+      <span class="box-icon">🎉</span>
+      <div>Après ces commandes, l'application est prête. Ouvrez <strong>http://localhost:5173</strong> et connectez-vous
+        avec <code>admin@dominatores.ma</code> / <code>password123</code>.</div>
+    </div>
+
+    <!-- ════════════════ FOOTER ════════════════ -->
+    <div class="footer">
+      <p><strong>DOMINATORES</strong> — Plateforme de Planification d'Événements sur Mesure</p>
+      <p>Projet PIE · Groupe de 5 étudiants · Stack : Laravel + React + SQLite + Three.js</p>
+      <p style="margin-top:8px;">Documentation générée le 27 Avril 2026 · Version 1.0</p>
+    </div>
+
+  </div><!-- /page -->
+</body>
+
+</html>
