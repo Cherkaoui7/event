@@ -1,10 +1,14 @@
 /* ── Reset & Base ──────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #fdfbf7;
   color: #333;
   -webkit-font-smoothing: antialiased;
@@ -21,21 +25,43 @@ body::before {
 }
 
 /* ── Typographie ───────────────────────────────────────── */
-h1, h2, h3, h4, h5 { margin: 0 0 0.5em; }
-p { margin: 0 0 0.5em; line-height: 1.6; }
-a { text-decoration: none; }
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0 0 0.5em;
+}
+p {
+  margin: 0 0 0.5em;
+  line-height: 1.6;
+}
+a {
+  text-decoration: none;
+}
 
 /* ── Inputs focus ──────────────────────────────────────── */
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
   border-color: #b76e4b !important;
   box-shadow: 0 0 0 3px rgba(183, 110, 75, 0.12);
   outline: none;
 }
 
 /* ── Boutons hover ─────────────────────────────────────── */
-button:hover { opacity: 0.88; }
+button:hover {
+  opacity: 0.88;
+}
 
 /* ── Scrollbar ─────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #fdfbf7; }
-::-webkit-scrollbar-thumb { background: #ddd2c2; border-radius: 3px; }
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #fdfbf7;
+}
+::-webkit-scrollbar-thumb {
+  background: #ddd2c2;
+  border-radius: 3px;
+}
