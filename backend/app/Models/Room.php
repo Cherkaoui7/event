@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ class Room extends Model
 {
     protected $fillable = [
         'event_id', 'table_layout', 'decoration_style',
-        'lighting_style', 'custom_options'
+        'lighting_style', 'custom_options',
     ];
 
     public function event(): BelongsTo

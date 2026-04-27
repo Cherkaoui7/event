@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -11,14 +12,14 @@ class RoomController extends Controller
     public function show($eventId)
     {
         $event = Auth::user()->events()->findOrFail($eventId);
-        $room  = $event->room;
+        $room = $event->room;
 
-        if (!$room) {
+        if (! $room) {
             return response()->json([
-                'table_layout'     => null,
+                'table_layout' => null,
                 'decoration_style' => null,
-                'lighting_style'   => null,
-                'custom_options'   => null,
+                'lighting_style' => null,
+                'custom_options' => null,
             ]);
         }
 
@@ -30,10 +31,10 @@ class RoomController extends Controller
         $event = Auth::user()->events()->findOrFail($eventId);
 
         $validated = $request->validate([
-            'table_layout'     => 'nullable|string',
+            'table_layout' => 'nullable|string',
             'decoration_style' => 'nullable|string',
-            'lighting_style'   => 'nullable|string',
-            'custom_options'   => 'nullable|array',
+            'lighting_style' => 'nullable|string',
+            'custom_options' => 'nullable|array',
         ]);
 
         $room = $event->room;

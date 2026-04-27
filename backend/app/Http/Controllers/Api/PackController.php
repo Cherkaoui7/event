@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -23,14 +24,14 @@ class PackController extends Controller
     {
         $event = Auth::user()->events()->findOrFail($eventId);
         $request->validate(['pack_id' => 'required|exists:packs,id']);
-        $pack  = Pack::with('packCaterings.cateringItem')->findOrFail($request->pack_id);
+        $pack = Pack::with('packCaterings.cateringItem')->findOrFail($request->pack_id);
 
         // Appliquer les styles à la salle
         $room = $event->room ?? $event->room()->create([]);
         $room->update([
-            'table_layout'     => $pack->table_layout,
+            'table_layout' => $pack->table_layout,
             'decoration_style' => $pack->decoration_style,
-            'lighting_style'   => $pack->lighting_style,
+            'lighting_style' => $pack->lighting_style,
         ]);
 
         // Supprimer plats existants et appliquer ceux du pack
@@ -38,11 +39,11 @@ class PackController extends Controller
         $guestCount = max($event->guest_count, 1);
 
         foreach ($pack->packCaterings as $pc) {
-            $quantity = (int)($guestCount * $pc->quantity_per_guest);
+            $quantity = (int) ($guestCount * $pc->quantity_per_guest);
             $event->eventCaterings()->create([
                 'catering_item_id' => $pc->catering_item_id,
-                'quantity'         => $quantity,
-                'line_total'       => $quantity * $pc->cateringItem->price_per_person,
+                'quantity' => $quantity,
+                'line_total' => $quantity * $pc->cateringItem->price_per_person,
             ]);
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -8,7 +9,7 @@ class Pack extends Model
 {
     protected $fillable = [
         'name', 'description', 'event_type', 'base_price',
-        'decoration_style', 'lighting_style', 'table_layout', 'active'
+        'decoration_style', 'lighting_style', 'table_layout', 'active',
     ];
 
     public function packCaterings(): HasMany

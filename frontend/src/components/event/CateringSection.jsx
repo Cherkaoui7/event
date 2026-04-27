@@ -18,8 +18,6 @@ const CateringSection = ({ eventId, guestCount, onUpdate }) => {
       .finally(() => setLoading(false));
   }, [eventId]);
 
-  const selectedIds = selected.map((i) => i.catering_item_id);
-
   const addItem = async (itemId) => {
     try {
       const res = await apiClient.post(`/events/${eventId}/catering`, {

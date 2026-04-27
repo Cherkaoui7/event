@@ -26,7 +26,6 @@ const CustomizeRoom = () => {
   const [price, setPrice] = useState(0);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState("room");
-  const [confirming, setConfirming] = useState(false);
 
   const fetchAll = useCallback(async () => {
     try {
@@ -71,19 +70,6 @@ const CustomizeRoom = () => {
     link.href = image;
     link.download = `Dominatores_Simulation_${event?.title || "Salle"}.png`;
     link.click();
-  };
-
-  const handleConfirm = async () => {
-    if (!window.confirm("Confirmer la réservation ?")) return;
-    setConfirming(true);
-    try {
-      await apiClient.put(`/events/${id}`, { status: "confirmed" });
-      alert("Réservation confirmée !");
-      fetchAll();
-    } catch {
-      alert("Erreur lors de la confirmation.");
-    }
-    setConfirming(false);
   };
 
   const renderSelector = (options, currentValue, field) => (

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -20,23 +21,23 @@ class CateringController extends Controller
 
         $request->validate([
             'catering_item_id' => 'required|exists:catering_items,id',
-            'quantity'         => 'integer|min:1',
+            'quantity' => 'integer|min:1',
         ]);
 
-        $quantity     = $request->quantity ?? $event->guest_count;
-        $item         = CateringItem::findOrFail($request->catering_item_id);
-        $lineTotal    = $item->price_per_person * $quantity;
+        $quantity = $request->quantity ?? $event->guest_count;
+        $item = CateringItem::findOrFail($request->catering_item_id);
+        $lineTotal = $item->price_per_person * $quantity;
 
         $existing = $event->eventCaterings()->where('catering_item_id', $item->id)->first();
         if ($existing) {
-            $existing->quantity   += $quantity;
-            $existing->line_total  = $existing->quantity * $item->price_per_person;
+            $existing->quantity += $quantity;
+            $existing->line_total = $existing->quantity * $item->price_per_person;
             $existing->save();
         } else {
             $event->eventCaterings()->create([
                 'catering_item_id' => $item->id,
-                'quantity'         => $quantity,
-                'line_total'       => $lineTotal,
+                'quantity' => $quantity,
+                'line_total' => $lineTotal,
             ]);
         }
 
@@ -47,11 +48,11 @@ class CateringController extends Controller
 
     public function update(Request $request, $eventId, $cateringItemId)
     {
-        $event        = Auth::user()->events()->findOrFail($eventId);
-        $ec           = $event->eventCaterings()->where('catering_item_id', $cateringItemId)->firstOrFail();
+        $event = Auth::user()->events()->findOrFail($eventId);
+        $ec = $event->eventCaterings()->where('catering_item_id', $cateringItemId)->firstOrFail();
         $request->validate(['quantity' => 'required|integer|min:1']);
 
-        $ec->quantity   = $request->quantity;
+        $ec->quantity = $request->quantity;
         $ec->line_total = $ec->quantity * $ec->cateringItem->price_per_person;
         $ec->save();
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -11,6 +12,7 @@ class AdminMiddleware
         if ($request->user() && $request->user()->role === 'admin') {
             return $next($request);
         }
+
         return response()->json(['message' => 'Accès non autorisé.'], 403);
     }
 }

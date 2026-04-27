@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ class Event extends Model
 {
     protected $fillable = [
         'user_id', 'title', 'event_type', 'status',
-        'guest_count', 'budget', 'total_price'
+        'guest_count', 'budget', 'total_price',
     ];
 
     public function user(): BelongsTo

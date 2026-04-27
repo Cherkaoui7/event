@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const SeatingChart = ({ guestCount, layout }) => {
   // Déterminer la capacité par table selon le layout

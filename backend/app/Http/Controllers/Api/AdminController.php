@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -25,12 +26,12 @@ class AdminController extends Controller
     public function stats()
     {
         // ── KPI cards ──
-        $totalUsers     = User::count();
-        $totalEvents    = Event::count();
-        $totalRevenue   = Event::sum('total_price');
-        $avgGuests      = round(Event::avg('guest_count'));
-        $adminCount     = User::where('role', 'admin')->count();
-        $clientCount    = User::where('role', 'client')->count();
+        $totalUsers = User::count();
+        $totalEvents = Event::count();
+        $totalRevenue = Event::sum('total_price');
+        $avgGuests = round(Event::avg('guest_count'));
+        $adminCount = User::where('role', 'admin')->count();
+        $clientCount = User::where('role', 'client')->count();
 
         // ── Events by type (pie chart) ──
         $eventsByType = Event::select('event_type', DB::raw('count(*) as count'))
@@ -44,9 +45,9 @@ class AdminController extends Controller
 
         // ── Monthly registrations (bar chart – last 6 months) ──
         $monthlyUsers = User::select(
-                DB::raw("strftime('%Y-%m', created_at) as month"),
-                DB::raw('count(*) as count')
-            )
+            DB::raw("strftime('%Y-%m', created_at) as month"),
+            DB::raw('count(*) as count')
+        )
             ->where('created_at', '>=', now()->subMonths(6)->startOfMonth())
             ->groupBy('month')
             ->orderBy('month')
@@ -54,10 +55,10 @@ class AdminController extends Controller
 
         // ── Monthly revenue (area chart – last 6 months) ──
         $monthlyRevenue = Event::select(
-                DB::raw("strftime('%Y-%m', created_at) as month"),
-                DB::raw('sum(total_price) as revenue'),
-                DB::raw('count(*) as events')
-            )
+            DB::raw("strftime('%Y-%m', created_at) as month"),
+            DB::raw('sum(total_price) as revenue'),
+            DB::raw('count(*) as events')
+        )
             ->where('created_at', '>=', now()->subMonths(6)->startOfMonth())
             ->groupBy('month')
             ->orderBy('month')
@@ -65,20 +66,20 @@ class AdminController extends Controller
 
         // ── Top 5 clients by revenue ──
         $topClients = Event::select(
-                'user_id',
-                DB::raw('sum(total_price) as total_revenue'),
-                DB::raw('count(*) as event_count')
-            )
+            'user_id',
+            DB::raw('sum(total_price) as total_revenue'),
+            DB::raw('count(*) as event_count')
+        )
             ->groupBy('user_id')
             ->orderByDesc('total_revenue')
             ->limit(5)
             ->with('user:id,name')
             ->get()
-            ->map(fn($e) => [
-                'name'          => $e->user->name ?? 'Inconnu',
-                'total_revenue' => $e->total_revenue,
-                'event_count'   => $e->event_count,
-            ]);
+            ->map(fn ($e) => [
+            'name' => $e->user->name ?? 'Inconnu',
+            'total_revenue' => $e->total_revenue,
+            'event_count' => $e->event_count,
+        ]);
 
         // ── Budget vs Actual (scatter-style data) ──
         $budgetVsActual = Event::select('title', 'budget', 'total_price')
@@ -87,19 +88,19 @@ class AdminController extends Controller
 
         return response()->json([
             'kpis' => [
-                'totalUsers'   => $totalUsers,
-                'totalEvents'  => $totalEvents,
+                'totalUsers' => $totalUsers,
+                'totalEvents' => $totalEvents,
                 'totalRevenue' => $totalRevenue,
-                'avgGuests'    => $avgGuests,
-                'adminCount'   => $adminCount,
-                'clientCount'  => $clientCount,
+                'avgGuests' => $avgGuests,
+                'adminCount' => $adminCount,
+                'clientCount' => $clientCount,
             ],
-            'eventsByType'    => $eventsByType,
-            'eventsByStatus'  => $eventsByStatus,
-            'monthlyUsers'    => $monthlyUsers,
-            'monthlyRevenue'  => $monthlyRevenue,
-            'topClients'      => $topClients,
-            'budgetVsActual'  => $budgetVsActual,
+            'eventsByType' => $eventsByType,
+            'eventsByStatus' => $eventsByStatus,
+            'monthlyUsers' => $monthlyUsers,
+            'monthlyRevenue' => $monthlyRevenue,
+            'topClients' => $topClients,
+            'budgetVsActual' => $budgetVsActual,
         ]);
     }
 }

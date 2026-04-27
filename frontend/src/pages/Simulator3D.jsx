@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, ContactShadows } from "@react-three/drei";
 import * as THREE from "three";
@@ -758,20 +758,7 @@ const RoomScene = ({ deco, layout, light }) => {
           />
         ))}
 
-      {layout === "cocktail" &&
-        Array.from({ length: 15 }).map((_, i) => (
-          <TableSetup
-            key={`ct-${i}`}
-            position={[
-              (Math.random() - 0.5) * 20,
-              0,
-              (Math.random() - 0.5) * 16,
-            ]}
-            type="cocktail"
-            theme={theme}
-            guests={0}
-          />
-        ))}
+      {layout === "cocktail" && <CocktailTables theme={theme} />}
 
       {layout === "u_shape" && (
         <group position={[0, 0, 2]}>
@@ -924,6 +911,30 @@ const RoomScene = ({ deco, layout, light }) => {
         </>
       )}
     </group>
+  );
+};
+
+const CocktailTables = ({ theme }) => {
+  const positions = useMemo(() => {
+    return Array.from({ length: 15 }).map(() => [
+      (Math.random() - 0.5) * 20,
+      0,
+      (Math.random() - 0.5) * 16,
+    ]);
+  }, []);
+
+  return (
+    <>
+      {positions.map((pos, i) => (
+        <TableSetup
+          key={`ct-${i}`}
+          position={pos}
+          type="cocktail"
+          theme={theme}
+          guests={0}
+        />
+      ))}
+    </>
   );
 };
 

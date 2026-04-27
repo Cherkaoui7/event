@@ -64,8 +64,8 @@ const AdminDashboard = () => {
 
   /* ── Fetch data based on active tab ── */
   const fetchData = useCallback(() => {
-    setLoading(true);
     if (tab === "dashboard") {
+      setLoading(true);
       apiClient
         .get("/admin/stats")
         .then((r) => setStats(r.data))
@@ -78,6 +78,7 @@ const AdminDashboard = () => {
         )
         .finally(() => setLoading(false));
     } else if (tab === "users") {
+      setLoading(true);
       apiClient
         .get("/admin/users")
         .then((r) => setUsers(r.data))
@@ -90,6 +91,7 @@ const AdminDashboard = () => {
         )
         .finally(() => setLoading(false));
     } else {
+      setLoading(true);
       apiClient
         .get("/admin/events")
         .then((r) => setEvents(r.data))
@@ -108,31 +110,32 @@ const AdminDashboard = () => {
     fetchData();
   }, [fetchData]);
 
-  /* ── Tab button ── */
-  const TabBtn = ({ id, label, icon }) => (
-    <button
-      onClick={() => setTab(id)}
-      style={{
-        ...s.tabBtn,
-        background: tab === id ? "#b76e4b" : "#f1ede6",
-        color: tab === id ? "#fff" : "#5a4a3f",
-        transform: tab === id ? "translateY(-2px)" : "none",
-        boxShadow: tab === id ? "0 4px 12px rgba(183,110,75,0.35)" : "none",
-      }}
-    >
-      <span style={{ marginRight: 6, fontSize: "1.1em" }}>{icon}</span>
-      {label}
-    </button>
-  );
-
   return (
     <div style={s.container}>
       <h2 style={s.heading}>Panneau d'administration</h2>
 
       <div style={s.tabs}>
-        <TabBtn id="dashboard" label="Tableau de bord" icon="📊" />
-        <TabBtn id="users" label="Utilisateurs" icon="👥" />
-        <TabBtn id="events" label="Événements" icon="📅" />
+        <TabBtn
+          id="dashboard"
+          label="Tableau de bord"
+          icon="📊"
+          activeTab={tab}
+          onSelect={setTab}
+        />
+        <TabBtn
+          id="users"
+          label="Utilisateurs"
+          icon="👥"
+          activeTab={tab}
+          onSelect={setTab}
+        />
+        <TabBtn
+          id="events"
+          label="Événements"
+          icon="📅"
+          activeTab={tab}
+          onSelect={setTab}
+        />
       </div>
 
       {loading && <p style={s.loadingText}>Chargement…</p>}
@@ -440,6 +443,23 @@ const ChartCard = ({ title, children }) => (
     <h3 style={s.chartTitle}>{title}</h3>
     {children}
   </div>
+);
+
+/* ═══════ Tab Button ═══════ */
+const TabBtn = ({ id, label, icon, activeTab, onSelect }) => (
+  <button
+    onClick={() => onSelect(id)}
+    style={{
+      ...s.tabBtn,
+      background: activeTab === id ? "#b76e4b" : "#f1ede6",
+      color: activeTab === id ? "#fff" : "#5a4a3f",
+      transform: activeTab === id ? "translateY(-2px)" : "none",
+      boxShadow: activeTab === id ? "0 4px 12px rgba(183,110,75,0.35)" : "none",
+    }}
+  >
+    <span style={{ marginRight: 6, fontSize: "1.1em" }}>{icon}</span>
+    {label}
+  </button>
 );
 
 /* ═══════════════════════════════════
