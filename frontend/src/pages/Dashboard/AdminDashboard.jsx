@@ -12,6 +12,7 @@ const AdminDashboard = () => {
     const url = tab === 'users' ? '/admin/users' : '/admin/events';
     apiClient.get(url)
       .then(r => tab === 'users' ? setUsers(r.data) : setEvents(r.data))
+      .catch(err => console.error('Admin API error:', err.response?.status, err.response?.data))
       .finally(() => setLoading(false));
   }, [tab]);
 
