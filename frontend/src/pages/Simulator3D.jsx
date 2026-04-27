@@ -915,13 +915,13 @@ const RoomScene = ({ deco, layout, light }) => {
 };
 
 const CocktailTables = ({ theme }) => {
-  const positions = useMemo(() => {
-    return Array.from({ length: 15 }).map(() => [
+  const [positions] = useState(() =>
+    Array.from({ length: 15 }).map(() => [
       (Math.random() - 0.5) * 20,
       0,
       (Math.random() - 0.5) * 16,
-    ]);
-  }, []);
+    ]),
+  );
 
   return (
     <>

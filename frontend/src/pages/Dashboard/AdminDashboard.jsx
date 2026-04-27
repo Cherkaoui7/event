@@ -60,12 +60,11 @@ const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [events, setEvents] = useState([]);
   const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   /* ── Fetch data based on active tab ── */
   const fetchData = useCallback(() => {
     if (tab === "dashboard") {
-      setLoading(true);
       apiClient
         .get("/admin/stats")
         .then((r) => setStats(r.data))
@@ -78,7 +77,6 @@ const AdminDashboard = () => {
         )
         .finally(() => setLoading(false));
     } else if (tab === "users") {
-      setLoading(true);
       apiClient
         .get("/admin/users")
         .then((r) => setUsers(r.data))
@@ -91,7 +89,6 @@ const AdminDashboard = () => {
         )
         .finally(() => setLoading(false));
     } else {
-      setLoading(true);
       apiClient
         .get("/admin/events")
         .then((r) => setEvents(r.data))
@@ -120,21 +117,30 @@ const AdminDashboard = () => {
           label="Tableau de bord"
           icon="📊"
           activeTab={tab}
-          onSelect={setTab}
+          onSelect={(id) => {
+            setLoading(true);
+            setTab(id);
+          }}
         />
         <TabBtn
           id="users"
           label="Utilisateurs"
           icon="👥"
           activeTab={tab}
-          onSelect={setTab}
+          onSelect={(id) => {
+            setLoading(true);
+            setTab(id);
+          }}
         />
         <TabBtn
           id="events"
           label="Événements"
           icon="📅"
           activeTab={tab}
-          onSelect={setTab}
+          onSelect={(id) => {
+            setLoading(true);
+            setTab(id);
+          }}
         />
       </div>
 
