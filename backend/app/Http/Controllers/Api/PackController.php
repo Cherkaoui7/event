@@ -12,12 +12,18 @@ class PackController extends Controller
 {
     public function index()
     {
-        return response()->json(Pack::with('packCaterings.cateringItem')->where('active', true)->get());
+        $packs = \Cache::remember('packs_active', 3600, function () {
+            return Pack::with('packCaterings.cateringItem')->where('active', true)->get();
+        });
+        return response()->json($packs);
     }
 
     public function show($id)
     {
-        return response()->json(Pack::with('packCaterings.cateringItem')->findOrFail($id));
+        $pack = \Cache::remember("pack_{$id}", 3600, function () use ($id) {
+            return Pack::with('packCaterings.cateringItem')->findOrFail($id);
+        });
+        return response()->json($pack);
     }
 
     public function apply(Request $request, $eventId)

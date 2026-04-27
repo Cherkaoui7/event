@@ -79,7 +79,7 @@ const AdminDashboard = () => {
     } else if (tab === "users") {
       apiClient
         .get("/admin/users")
-        .then((r) => setUsers(r.data))
+        .then((r) => setUsers(r.data.data || r.data))
         .catch((err) =>
           console.error(
             "Users error:",
@@ -91,7 +91,7 @@ const AdminDashboard = () => {
     } else {
       apiClient
         .get("/admin/events")
-        .then((r) => setEvents(r.data))
+        .then((r) => setEvents(r.data.data || r.data))
         .catch((err) =>
           console.error(
             "Events error:",

@@ -1,22 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import apiClient from "../../api/axios";
 
 const CateringSection = ({ eventId, guestCount, onUpdate }) => {
-  const [items, setItems] = useState([]);
   const [selected, setSelected] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    Promise.all([
-      apiClient.get("/catering"),
-      apiClient.get(`/events/${eventId}`),
-    ])
-      .then(([catRes, evRes]) => {
-        setItems(catRes.data);
-        setSelected(evRes.data.event_caterings || []);
-      })
-      .finally(() => setLoading(false));
-  }, [eventId]);
+  const { data: items = [], isLoading } = useQuery({
+    queryKey: ["catering"],
+    queryFn: () => apiClient.get("/catering").then((res) => res.data),
+  });
+
+  useQuery({
+    queryKey: ["event", eventId],
+    queryFn: () =>
+      apiClient.get(`/events/${eventId}`).then((res) => {
+        setSelected(res.data.event_caterings || []);
+        return res.data;
+      }),
+  });
 
   const addItem = async (itemId) => {
     try {
@@ -54,7 +55,7 @@ const CateringSection = ({ eventId, guestCount, onUpdate }) => {
     }
   };
 
-  if (loading) return <p>Chargement du catalogue...</p>;
+  if (isLoading) return <p>Chargement du catalogue...</p>;
 
   const CATEGORIES = ["entrée", "plat", "dessert"];
 

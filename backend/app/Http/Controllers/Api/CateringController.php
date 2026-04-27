@@ -12,7 +12,10 @@ class CateringController extends Controller
 {
     public function index()
     {
-        return response()->json(CateringItem::where('active', true)->get());
+        $items = \Cache::remember('catering_items_active', 3600, function () {
+            return CateringItem::where('active', true)->get();
+        });
+        return response()->json($items);
     }
 
     public function store(Request $request, $eventId)

@@ -12,14 +12,18 @@ class AdminController extends Controller
     public function users()
     {
         return response()->json(
-            User::select('id', 'name', 'email', 'role', 'created_at')->get()
+            User::select('id', 'name', 'email', 'role', 'created_at')
+                ->latest()
+                ->paginate(50)
         );
     }
 
     public function events()
     {
         return response()->json(
-            Event::with('user:id,name,email')->latest()->get()
+            Event::with('user:id,name,email')
+                ->latest()
+                ->paginate(50)
         );
     }
 
